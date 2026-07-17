@@ -39,10 +39,39 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  callbacks: {},
-  session: {},
-  pages: {},
-  secret: "Aniket",
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = token.name;
+        token.email = token.email;
+        token.image = token.image;
+      }
+      return token;
+    },
+
+    session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.image as string;
+      }
+      return session;
+    },
+  },
+
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  },
+
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  secret: process.env.NEXT_AUTH_SECRET, 
 };
 
 export default authOptions;
