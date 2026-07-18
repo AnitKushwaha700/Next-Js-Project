@@ -4,6 +4,8 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import toast from "react-hot-toast";
+
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,10 +20,17 @@ function Register() {
         email,
         password,
       });
-      router.push("/login");    
-    console.log(result);
-     
-    } catch (error) {
+      toast.success("User Registered Successfully!");
+      console.log(result.data);
+      
+      
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
+
+
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Registration Failed!");
       console.log(error);
     }
   };
@@ -61,9 +70,14 @@ function Register() {
             />
           </div>
 
-          <p className="text-sm text-center mt-1" onClick={}>
+          <p
+            className="text-sm text-center mt-1"
+            onClick={() => router.push("/login")}
+          >
             Already have an account ?{" "}
-            <span className="text-blue-400 hover:underline">login</span>
+            <span className="text-blue-400 hover:underline cursor-pointer">
+              login
+            </span>
           </p>
 
           <button className="w-full py-2 px-4 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors">

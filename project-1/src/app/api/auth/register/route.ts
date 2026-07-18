@@ -1,19 +1,29 @@
 import connectDb from "@/lib/db";
-import User from "@/app/model/user.model";
+import User from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
     const { name, email, password } = await request.json();
+    console.log("Request : ", { name, email, password });
+
     await connectDb();
-    let existUser = await User.findOne({ email });
+
+    const existUser = await User.findOne({ email });
+    console.log("Existing User:" , existUser);
+    
+
     if (existUser) {
       return NextResponse.json(
         { message: "User already exist!" },
         { status: 400 },
       );
     }
+
+    console.log();
+    
+
     if (password.length < 6) {
       return NextResponse.json(
         { message: "password must be at least 6 characters!" },

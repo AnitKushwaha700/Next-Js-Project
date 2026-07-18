@@ -2,7 +2,8 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDb from "./db";
 import bcrypt from "bcryptjs";
-import User from "@/app/model/user.model";
+import User from "@/model/user.model";
+import Google from "next-auth/providers/google";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -38,6 +39,11 @@ const authOptions: NextAuthOptions = {
         };
       },
     }),
+
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.,
+    }),
   ],
 
   callbacks: {
@@ -71,7 +77,7 @@ const authOptions: NextAuthOptions = {
     signIn: "/login",
     error: "/login",
   },
-  secret: process.env.NEXT_AUTH_SECRET, 
+  secret: process.env.NEXT_AUTH_SECRET,
 };
 
 export default authOptions;
